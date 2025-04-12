@@ -25,11 +25,10 @@ class HomeScreen extends StatelessWidget {
               height: 15,
             ),
             Center(
-              child: Text(
-                "TP Aprobacion Directa (Cappa)",
-                style: TextStyle(
-                  fontSize: 24,
-                ),
+              child: Image(
+                image: AssetImage('assets/1200px-Spotify.png'),
+                width: 400,
+                height: 400,
               ),
             ),
           ],
