@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
           'home': (context) => const HomeScreen(),
           'album_item': (context) => const AlbumSingleScreen(),
           'albums': (context) => const AlbumsScreen(),
+          'album_tracks': (context) => const AlbumTracksScreen()
         }
         );
   }

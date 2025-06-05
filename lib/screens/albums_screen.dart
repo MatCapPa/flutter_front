@@ -18,7 +18,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
   final TextEditingController _controller = TextEditingController();
   String _savedName = '';
   String _artistDetails = '';
-  String _artistDetails2 = '';
+  String _artistAlbumsDetails = '';
   String? _artistId;
 
   Future<List<Album>>? futureAlbums;
@@ -33,18 +33,18 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
       if (response.statusCode == 200) {
         final data = albumFromJson(response.body);
         setState(() {
-          _artistDetails2 = 'Se encontraron ${data.length} álbumes.';
+          _artistAlbumsDetails = 'Se encontraron ${data.length} álbumes.';
         });
         return data;
       } else {
         setState(() {
-          _artistDetails2 = 'Error: ${response.statusCode}';
+          _artistAlbumsDetails = 'Error: ${response.statusCode}';
         });
         return [];
       }
     } catch (e) {
       setState(() {
-        _artistDetails2 = 'Error: $e';
+        _artistAlbumsDetails = 'Error: $e';
       });
       return [];
     }
@@ -117,7 +117,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
             ),
             const SizedBox(height: 20),
             Text(
-              '$_artistDetails \n $_artistDetails2',
+              '$_artistDetails \n $_artistAlbumsDetails',
               style: const TextStyle(fontSize: 18),
             ),
             const SizedBox(height: 20),
@@ -139,7 +139,7 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
                         final album = albums[index];
                         return GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(context, 'album_item',
+                            Navigator.pushNamed(context, 'album_tracks', //album_item   album_tracks
                               arguments: <String, dynamic>{
                                 'titulo': album.name,
                                 'release_date': album.releaseDate,
