@@ -55,7 +55,7 @@ class AlbumSingleScreen extends StatelessWidget {
                     //color:  Colors.red,
                     child: Center(
                       child: Text(
-                        'Cantidad de canciones: ${args['nro']}',
+                        args['artists'],
                         style: const TextStyle(
                           fontSize: 24,
                           

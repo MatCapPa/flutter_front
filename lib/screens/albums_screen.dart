@@ -24,8 +24,8 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
   Future<List<Album>>? futureAlbums;
 
   Future<List<Album>> fetchAlbums(String artistId) async {
-    final uri = Uri.parse('https://nodejs-back-6tqt.onrender.com/api/$artistId/albums');
-    //final uri = Uri.parse('http://localhost:3000/api/$artistId/albums');  //url para Chrome
+    //final uri = Uri.parse('https://nodejs-back-6tqt.onrender.com/api/$artistId/albums');
+    final uri = Uri.parse('http://localhost:3000/api/$artistId/albums');  //url para Chrome
     //final uri = Uri.parse('http://10.0.2.2:3000/api/artistas/$artistId/albums');     //url para Android
 
     try {
@@ -51,8 +51,8 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
   }
 
   Future<void> searchArtist(String artistName) async {
-    final uri = Uri.parse('https://nodejs-back-6tqt.onrender.com/api/search?q=$artistName');
-    //final uri = Uri.parse('http://localhost:3000/api/search?q=$artistName');  //url para Chrome
+    //final uri = Uri.parse('https://nodejs-back-6tqt.onrender.com/api/search?q=$artistName');
+    final uri = Uri.parse('http://localhost:3000/api/search?q=$artistName');  //url para Chrome
     //final uri = Uri.parse('http://10.0.2.2:3000/api/artistas/search?q=$artistName');     //url para Android
 
     try {
@@ -144,7 +144,9 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
                                 'titulo': album.name,
                                 'release_date': album.releaseDate,
                                 'imagen': album.imageUrl,
-                                'nro': album.total_tracks,  //total de canciones del album
+                                'nro': album.total_tracks,
+                                'artists': album.artists.join(', '),
+                                'id': album.id  //total de canciones del album
                               });
                           FocusManager.instance.primaryFocus?.unfocus();
                           },
