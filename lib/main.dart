@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_front/helpers/preferences.dart';
+import 'package:flutter_front/providers/album_provider.dart';
 import 'package:flutter_front/providers/theme_provider.dart';
 import 'package:flutter_front/screens/screens.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +14,7 @@ void main() async {
       ChangeNotifierProvider<ThemeProvider>(
         create: (_) => ThemeProvider(isDarkMode: Preferences.darkmode),
       ),
-      
+       ChangeNotifierProvider(create: (_) => AlbumProvider()),
     ],
     child: const MyApp(),
   ));

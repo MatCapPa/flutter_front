@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_front/helpers/tracks_preference.dart';
 import 'package:flutter_front/models/track_model.dart';
-import 'package:flutter_front/widgets/drawer_menu.dart';
+import 'package:flutter_front/providers/album_provider.dart';
 import 'package:flutter_front/widgets/spotify_appbar.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class AlbumTracksScreen extends StatefulWidget {
   const AlbumTracksScreen({super.key});
@@ -14,21 +15,20 @@ class AlbumTracksScreen extends StatefulWidget {
 
 class _AlbumTracksScreenState extends State<AlbumTracksScreen> {
   String? _savedData;
-  late String _imagen;
-  late String _albumId;
   late Future<List<Tracks>> futureTracks;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    _albumId = args['id'];
-    _imagen = args['imagen'];
-    futureTracks = fetchTracks(_albumId);
+    final album = Provider.of<AlbumProvider>(context).selectedAlbum;
+    if (album != null) {
+      futureTracks = fetchTracks(album.id);
+    }
   }
 
-  Future<List<Tracks>> fetchTracks(String _albumId) async { 
-    final uri = Uri.parse('http://localhost:3000/api/albums/tracks/${_albumId}');  //url para Chrome
+  Future<List<Tracks>> fetchTracks(String albumId) async { 
+    //final uri = Uri.parse('https://nodejs-back-6tqt.onrender.com/api/albums/tracks/${albumId});
+    final uri = Uri.parse('http://localhost:3000/api/albums/tracks/${albumId}');  //url para Chrome
 
     try {
       final response = await http.get(uri);
@@ -51,54 +51,78 @@ class _AlbumTracksScreenState extends State<AlbumTracksScreen> {
       });
       return [];
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    
+    final album = Provider.of<AlbumProvider>(context).selectedAlbum;
+    if (album == null) {
+      return const Scaffold(
+        body: Center(child: Text('No se ha seleccionado ningún álbum')),
+      );
+    }
+
     return Scaffold(
-      appBar: SpotifyAppBar(),
+      appBar: AppBar(),//SpotifyAppBar(),
       //drawer: DrawerMenu(),
-      body: Column(
+      body: Stack(
         children: [
-          Container(
-              width: double.infinity,
-              height: size.height * 0.62,
-              color: const Color.fromARGB(255, 255, 255, 255),
-              child: Image.network(_imagen),
+          Positioned.fill(
+            child: Image.network(
+            album.imageUrl,
+            fit: BoxFit.cover,
             ),
-            const SizedBox(
-              height: 15,
+          ) ,
+          Positioned.fill(
+            child: Container(
+              color: Colors.black.withOpacity(0.7),
             ),
-          Expanded(
-            child: FutureBuilder<List<Tracks>>(
-            future: futureTracks,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(child: Text('No se encontraron canciones'));
-              } else {
-                final tracks = snapshot.data!;
-                return ListView.builder(
-                  itemCount: tracks.length,
-                  itemBuilder: (context, index) {
-                    final track = tracks[index];
-                    return ListTile(
-                      leading: CircleAvatar(
-                        child: Text('${track.track_number}'),
-                      ),
-                      title: Text(track.name),
-                    );
-                  },
-                );
-              }
-            },
+          ),
+          Column(
+            //crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  album.title, // Título del álbum
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
+              ),
+              Expanded(
+                child: FutureBuilder<List<Tracks>>(
+                future: futureTracks,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(child: Text('No se encontraron canciones'));
+                  } else {
+                    final tracks = snapshot.data!;
+                    return ListView.builder(
+                      itemCount: tracks.length,
+                      itemBuilder: (context, index) {
+                        final track = tracks[index];
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Theme.of(context).cardColor,
+                            child: Text('${track.track_number}'),
+                          ),
+                          title: Text(track.name,style: const TextStyle(color: Colors.white)),
+                        );
+                      },
+                    );
+                  }
+                },
+                ),
+              ),
+            ],
           ),
         ],
       ),

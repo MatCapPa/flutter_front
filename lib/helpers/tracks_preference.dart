@@ -17,7 +17,6 @@ class Tracks{
     "name": name,
     "id": id,
     "track_number": track_number
-
   };
 
   @override

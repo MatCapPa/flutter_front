@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_front/helpers/album_preference.dart';
 import 'package:flutter_front/models/album_model.dart';
+import 'package:flutter_front/providers/album_provider.dart';
 import 'package:flutter_front/widgets/create_card.dart';
 import 'package:flutter_front/widgets/drawer_menu.dart';
 import 'package:flutter_front/widgets/spotify_appbar.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class AlbumsScreen extends StatefulWidget {
   const AlbumsScreen({super.key});
@@ -23,9 +25,9 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
 
   Future<List<Album>>? futureAlbums;
 
-  Future<List<Album>> fetchAlbums(String artistId) async {
+  Future<List<Album>> fetchAlbums(String _artistId) async {
     //final uri = Uri.parse('https://nodejs-back-6tqt.onrender.com/api/$artistId/albums');
-    final uri = Uri.parse('http://localhost:3000/api/$artistId/albums');  //url para Chrome
+    final uri = Uri.parse('http://localhost:3000/api/$_artistId/albums');  //url para Chrome
     //final uri = Uri.parse('http://10.0.2.2:3000/api/artistas/$artistId/albums');     //url para Android
 
     try {
@@ -68,9 +70,6 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
           setState(() {
             _artistId = artistId;
             _artistDetails = 'Artista: $artistName';
-          });
-
-          setState(() {
             futureAlbums = fetchAlbums(artistId);
           });
         } else {
@@ -93,6 +92,8 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final albumProvider = Provider.of<AlbumProvider>(context, listen: false);
+
     return Scaffold(
       appBar: SpotifyAppBar(),
       drawer: DrawerMenu(),
@@ -139,20 +140,13 @@ class _AlbumsScreenState extends State<AlbumsScreen> {
                         final album = albums[index];
                         return GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(context, 'album_tracks', //album_item   album_tracks
-                              arguments: <String, dynamic>{
-                                'titulo': album.name,
-                                'release_date': album.releaseDate,
-                                'imagen': album.imageUrl,
-                                'nro': album.total_tracks,
-                                'artists': album.artists.join(', '),
-                                'id': album.id  //total de canciones del album
-                              });
-                          FocusManager.instance.primaryFocus?.unfocus();
+                            albumProvider.setSelectedAlbum(album); // Guardamos el álbum
+                            Navigator.pushNamed(context, 'album_tracks');
+                            FocusManager.instance.primaryFocus?.unfocus();
                           },
                           child: CardScreen(
                             url: album.imageUrl,
-                            title: album.name,
+                            title: album.title,
                             body: album.releaseDate,
                           ),
                         );
