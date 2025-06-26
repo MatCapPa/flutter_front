@@ -59,7 +59,7 @@ class _AlbumTracksScreenState extends State<AlbumTracksScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(),//SpotifyAppBar(),
+      appBar: AppBar(),
       //drawer: DrawerMenu(),
       body: Stack(
         children: [

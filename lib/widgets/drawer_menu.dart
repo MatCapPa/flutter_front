@@ -5,7 +5,11 @@ import 'package:flutter_front/helpers/preferences.dart';
 class DrawerMenu extends StatelessWidget {
   final List<Map<String, String>> _menuItems = <Map<String, String>>[
     {'route': 'home', 'title': 'Home', 'subtitle': 'Pagina principal'},
-    {'route': 'albums', 'title': 'Albunes', 'subtitle': 'Listado de albums de musica'},
+    {'route': 'albums', 'title': 'Albumes', 'subtitle': 'Listado de albums de musica'},
+    {'route': 'album_show', 'title': 'Albums en BD', 'subtitle': ""},
+    {'route': 'artist_show', 'title': 'Artistas en BD', 'subtitle': ""},
+    {'route': 'track_show', 'title': 'Pistas en BD', 'subtitle': ""},
+    
     
   ];
 

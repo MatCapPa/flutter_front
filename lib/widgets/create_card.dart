@@ -14,11 +14,12 @@ class CardScreen extends StatelessWidget {
       elevation: 10,
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: Column(children: [
-        Image.network(url),
-        const SizedBox(
-          height: 8,
-        ),
+      child: Column(
+        children: [
+          Image.network(url),
+          const SizedBox(
+            height: 8,
+          ),
         Text(
           title,
           maxLines: 2,

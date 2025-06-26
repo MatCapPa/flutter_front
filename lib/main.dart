@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_front/helpers/preferences.dart';
 import 'package:flutter_front/providers/album_provider.dart';
+import 'package:flutter_front/providers/database_provider.dart';
 import 'package:flutter_front/providers/theme_provider.dart';
 import 'package:flutter_front/screens/screens.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,9 @@ void main() async {
         create: (_) => ThemeProvider(isDarkMode: Preferences.darkmode),
       ),
        ChangeNotifierProvider(create: (_) => AlbumProvider()),
+       ChangeNotifierProvider(create: (_) => AlbumDBProvider()),
+       ChangeNotifierProvider(create: (_) => ArtistDBProvider()),
+       ChangeNotifierProvider(create: (_) => TrackDBProvider()),
     ],
     child: const MyApp(),
   ));
@@ -32,10 +36,15 @@ class MyApp extends StatelessWidget {
         theme: tema.temaActual,
         routes: {
           'home': (context) => const HomeScreen(),
-          'album_item': (context) => const AlbumSingleScreen(),
           'albums': (context) => const AlbumsScreen(),
-          'album_tracks': (context) => const AlbumTracksScreen()
+          'album_tracks': (context) => const AlbumTracksScreen(),
+          'album_show': (context) => const AlbumsShowScreen(),
+          'album_database_screen': (context) => const AlbumDatabaseScreen(),
+          'artist_show': (context) => const ArtistsShowScreen(),
+          "artist_database_screen":(context) => const ArtistDatabaseScreen(),
+          'track_show': (context) => const TracksShowScreen(),
+          "track_database_screen":(context) => const TrackDatabaseScreen(),
         }
-        );
+      );
   }
 }
