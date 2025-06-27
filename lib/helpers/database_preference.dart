@@ -1,5 +1,5 @@
 class ArtistDB{
-  final String name;
+  late final String name;
   final int id;
   final String spotifyid;
 

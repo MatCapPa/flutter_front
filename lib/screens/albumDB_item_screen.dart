@@ -11,22 +11,15 @@ class AlbumDatabaseScreen extends StatefulWidget {
 
 class _AlbumDatabaseScreenState extends State<AlbumDatabaseScreen> {
   
-  late TextEditingController _nameController;
-  late TextEditingController _releaseDateController;
-  late TextEditingController _totalTracksController;
-
-  @override
-  void initState() {
-    super.initState();
-     final album = Provider.of<AlbumDBProvider>(context, listen: false).selectedAlbum;
-    _nameController = TextEditingController(text: album?.name);
-    _releaseDateController = TextEditingController(text: album?.releaseDate);
-    _totalTracksController = TextEditingController(text: album?.totalTracks.toString());
-  }
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _releaseDateController = TextEditingController();
+  final TextEditingController _totalTracksController = TextEditingController();
 
   @override
   void dispose() {
     _nameController.dispose();
+    _releaseDateController.dispose();
+    _totalTracksController.dispose();
     super.dispose();
   }
   
@@ -102,14 +95,23 @@ class _AlbumDatabaseScreenState extends State<AlbumDatabaseScreen> {
                     children: [
                       ElevatedButton(
                         onPressed: () async {
+                          final name = _nameController.text.trim();
+                          final releaseDate = _releaseDateController.text.trim();
+                          final totalTracks = int.parse(_totalTracksController.text.trim());
+                          if (name.isEmpty || releaseDate.isEmpty || totalTracks == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('El nombre no puede estar vacío')),
+                            );
+                            return;
+                          }
                           try {
-                            await provider.actualizarAlbumDB(album.id);
+                            await provider.actualizarAlbumDB(album.id, name, releaseDate, totalTracks);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Datos actualizados')),
                             );
                           } catch (_) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Error al actualizar')),
+                              const SnackBar(content: Text('Error al actualizzzar')),
                             );
                           }
                         },

@@ -10,15 +10,7 @@ class ArtistDatabaseScreen extends StatefulWidget {
 }
 
 class _DatabaseScreenState extends State<ArtistDatabaseScreen> {
-  
-  late TextEditingController _nameController ;
-
-  @override
-  void initState() {
-    super.initState();
-     final artistProvider = Provider.of<ArtistDBProvider>(context, listen: false).selectedArtist;
-    _nameController = TextEditingController(text: artistProvider?.name);
-  }
+  final TextEditingController _nameController = TextEditingController();
 
   @override
   void dispose() {
@@ -77,9 +69,15 @@ class _DatabaseScreenState extends State<ArtistDatabaseScreen> {
                     children: [
                       ElevatedButton(
                         onPressed: () async {
+                          final name = _nameController.text.trim();
+                          if (name.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('El nombre no puede estar vacío')),
+                            );
+                            return;
+                          }
                           try {
-                            
-                            await provider.actualizarArtistDB(artist.id);
+                            await provider.actualizarArtistDB(artist.id,name);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Datos actualizados')),
                             );

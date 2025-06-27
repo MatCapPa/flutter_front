@@ -18,7 +18,7 @@ class AlbumDBProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> actualizarAlbumDB(int id) async {
+  Future<void> actualizarAlbumDB(int id, String name, String fecha, int cantPistas) async {
     if (_selectedAlbum == null) return;
 
     final response = await http.put(
@@ -28,15 +28,17 @@ class AlbumDBProvider extends ChangeNotifier {
         'x-api-key': 'apikeyutntup2025',
       },
       body: jsonEncode({
-        'name': _selectedAlbum?.name,
-        'release_date': _selectedAlbum?.releaseDate,
-        'total_tracks': _selectedAlbum?.totalTracks,
+        'name': name,
+        'release_date': fecha,
+        'total_tracks': cantPistas,
       }),
     );
 
     if (response.statusCode == 200) {
       notifyListeners();
     } else {
+      print('STATUS: ${response.statusCode}');
+      print('BODY: ${response.body}');
       throw Exception('Error al actualizar _selectedAlbum');
     }
   }
@@ -73,7 +75,7 @@ class ArtistDBProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  Future<void> actualizarArtistDB(int id) async {
+  Future<void> actualizarArtistDB(int id, String nombre) async {
     if (_selectedArtist == null) return;
 
     final response = await http.put(
@@ -83,7 +85,7 @@ class ArtistDBProvider extends ChangeNotifier{
         'x-api-key': 'apikeyutntup2025',
       },
       body: jsonEncode({ 
-        'nombre': _selectedArtist!.name + 'editado',
+        'nombre': nombre,
       }),
     );
 
@@ -128,7 +130,7 @@ class TrackDBProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  Future<void> actualizarTrackDB(int id) async {
+  Future<void> actualizarTrackDB(int id, String name, int number) async {
     if (_selectedTrack == null) return;
 
     final response = await http.put(
@@ -138,14 +140,16 @@ class TrackDBProvider extends ChangeNotifier{
         'x-api-key': 'apikeyutntup2025',
       },
       body: jsonEncode({
-        'name': _selectedTrack?.name,
-        'track_number': _selectedTrack?.trackNumber,
+        'name': name,
+        'track_number': number,
       }),
     );
 
     if (response.statusCode == 200) {
       notifyListeners();
     } else {
+      print('STATUS: ${response.statusCode}');
+      print('BODY: ${response.body}');
       throw Exception('Error al actualizar _selectedTrack');
     }
   }

@@ -11,20 +11,13 @@ class TrackDatabaseScreen extends StatefulWidget {
 
 class _DatabaseScreenState extends State<TrackDatabaseScreen> {
   
-  late TextEditingController _nameController;
-  late TextEditingController _trackNumberController;
-
-  @override
-  void initState() {
-    super.initState();
-     final trackProvider = Provider.of<TrackDBProvider>(context, listen: false).selectedTrack;
-    _nameController = TextEditingController(text: trackProvider?.name);
-    _trackNumberController = TextEditingController(text: trackProvider?.trackNumber.toString());
-  }
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _trackNumberController = TextEditingController();
 
   @override
   void dispose() {
     _nameController.dispose();
+    _trackNumberController.dispose();
     super.dispose();
   }
   
@@ -62,7 +55,7 @@ class _DatabaseScreenState extends State<TrackDatabaseScreen> {
               padding: const EdgeInsets.all(15.0),
               child: Column(
                 children: [
-                  Text('Spotify Id: ${track.spotifyid}'),
+                  Text('Spotify Id: ${track.spotifyid}, ID: ${track.id}'),
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _nameController,
@@ -89,8 +82,16 @@ class _DatabaseScreenState extends State<TrackDatabaseScreen> {
                     children: [
                       ElevatedButton(
                         onPressed: () async {
+                          final name = _nameController.text.trim();
+                          final trackNumber = int.tryParse(_trackNumberController.text.trim());
+                          if (name.isEmpty || trackNumber==null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('El nombre no puede estar vacío')),
+                            );
+                            return;
+                          }
                           try {
-                            await provider.actualizarTrackDB(track.id);
+                            await provider.actualizarTrackDB(track.id, name, trackNumber);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Datos actualizados')),
                             );
