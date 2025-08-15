@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_front/models/database_model.dart';
 import 'package:flutter_front/providers/database_provider.dart';
 import 'package:flutter_front/widgets/create_list.dart';
@@ -28,12 +29,12 @@ class _AlbumsShowScreenState extends State<AlbumsShowScreen> {
 
   Future<List<AlbumDB>> fetchAlbums() async {
     final uri = Uri.parse('https://nodejs-back-6tqt.onrender.com/db/albums/show');
-
+    final apiKey = dotenv.env['API_KEY'] ?? '';
     try {
       final response = await http.get(
         uri,
         headers: {
-          'x-api-key': 'apikeyutntup2025',
+          'x-api-key': apiKey,
           'Content-Type': 'application/json'
         },
       );
