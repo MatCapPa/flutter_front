@@ -111,7 +111,7 @@ class _AlbumDatabaseScreenState extends State<AlbumDatabaseScreen> {
                             );
                           } catch (_) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Error al actualizzzar')),
+                              const SnackBar(content: Text('Error al actualizar')),
                             );
                           }
                         },

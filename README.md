@@ -12,6 +12,7 @@ Está orientado a demostrar una arquitectura cliente-servidor moderna y funciona
 - Dart
 - HTTP package
 - Provider
+- Dotenv
 
 ## Instalación
 
