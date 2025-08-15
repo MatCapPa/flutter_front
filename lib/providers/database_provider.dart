@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_front/helpers/database_preference.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -21,11 +22,13 @@ class AlbumDBProvider extends ChangeNotifier {
   Future<void> actualizarAlbumDB(int id, String name, String fecha, int cantPistas) async {
     if (_selectedAlbum == null) return;
 
+    final apiKey = dotenv.env['API_KEY'] ?? '';
+
     final response = await http.put(
       Uri.parse('https://nodejs-back-6tqt.onrender.com/db/albums/$id'),
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': 'apikeyutntup2025',
+        'x-api-key': apiKey,
       },
       body: jsonEncode({
         'name': name,
@@ -46,9 +49,11 @@ class AlbumDBProvider extends ChangeNotifier {
   Future<void> borrarAlbumDB(int id) async {
     if (_selectedAlbum == null) return;
 
+    final apiKey = dotenv.env['API_KEY'] ?? '';
+
     final response = await http.delete(
       Uri.parse('https://nodejs-back-6tqt.onrender.com/db/albums/$id'),
-      headers: {'x-api-key': 'apikeyutntup2025',},
+      headers: {'x-api-key': apiKey},
     );
 
     if (response.statusCode == 200) {
@@ -78,11 +83,13 @@ class ArtistDBProvider extends ChangeNotifier{
   Future<void> actualizarArtistDB(int id, String nombre) async {
     if (_selectedArtist == null) return;
 
+    final apiKey = dotenv.env['API_KEY'] ?? '';
+
     final response = await http.put(
       Uri.parse('https://nodejs-back-6tqt.onrender.com/db/artists/$id'),
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': 'apikeyutntup2025',
+        'x-api-key': apiKey,
       },
       body: jsonEncode({ 
         'nombre': nombre,
@@ -101,9 +108,11 @@ class ArtistDBProvider extends ChangeNotifier{
   Future<void> borrarArtistDB(int id) async {
     if (_selectedArtist == null) return;
 
+    final apiKey = dotenv.env['API_KEY'] ?? '';
+
     final response = await http.delete(
       Uri.parse('https://nodejs-back-6tqt.onrender.com/db/artists/$id'),
-      headers: {'x-api-key': 'apikeyutntup2025',},
+      headers: {'x-api-key': apiKey},
     );
 
     if (response.statusCode == 200) {
@@ -133,11 +142,13 @@ class TrackDBProvider extends ChangeNotifier{
   Future<void> actualizarTrackDB(int id, String name, int number) async {
     if (_selectedTrack == null) return;
 
+    final apiKey = dotenv.env['API_KEY'] ?? '';
+
     final response = await http.put(
       Uri.parse('https://nodejs-back-6tqt.onrender.com/db/tracks/$id'),
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': 'apikeyutntup2025',
+        'x-api-key': apiKey,
       },
       body: jsonEncode({
         'name': name,
@@ -147,9 +158,7 @@ class TrackDBProvider extends ChangeNotifier{
 
     if (response.statusCode == 200) {
       notifyListeners();
-    } else {
-      print('STATUS: ${response.statusCode}');
-      print('BODY: ${response.body}');
+    } else {  //print('STATUS: ${response.statusCode}');print('BODY: ${response.body}');
       throw Exception('Error al actualizar _selectedTrack');
     }
   }
@@ -157,9 +166,11 @@ class TrackDBProvider extends ChangeNotifier{
   Future<void> borrarTrackDB(int id) async {
     if (_selectedTrack == null) return;
 
+    final apiKey = dotenv.env['API_KEY'] ?? '';
+
     final response = await http.delete(
       Uri.parse('https://nodejs-back-6tqt.onrender.com/db/tracks/$id'),
-      headers: {'x-api-key': 'apikeyutntup2025',},
+      headers: {'x-api-key': apiKey},
     );
 
     if (response.statusCode == 200) {
